@@ -45,14 +45,6 @@
 						</a>
 
 						<a href="#">
-							<span class="fab fa-pinterest-p"></span>
-						</a>
-
-						<a href="#">
-							<span class="fab fa-vimeo-v"></span>
-						</a>
-
-						<a href="#">
 							<span class="fab fa-youtube"></span>
 						</a>
 					</div>
@@ -134,59 +126,57 @@
 				<ul class="main-menu-m">
 					<li>
 						<a href="index.html">Home</a>
+					</li>
+					<?php 
+								///////////////MAIN KATEGORI////////////////
+								$sql="SELECT 
+								kategori_utama.id_kategori_utama,
+								kategori_utama.nama_kategori_utama 
+								FROM kategori_utama
+								LEFT JOIN kategori_berita
+								ON kategori_berita.id_kategori_utama=kategori_utama.id_kategori_utama
+								LEFT JOIN berita
+								ON kategori_berita.id_kategori_berita=berita.id_kategori_berita 
+								WHERE kategori_utama.aktif_kategori_utama='Y'
+								GROUP BY kategori_utama.id_kategori_utama
+								HAVING COUNT(berita.id_berita)>0
+								";
+								
+								$fetch=mysqli_query($kon,$sql);
+								
+								while ($main=mysqli_fetch_array($fetch)) {
+								///////////////MAIN KATEGORI////////////////
+					?>
+					<li>
+						<a href="#"><?=$main['nama_kategori_utama']; ?></a>
 						<ul class="sub-menu-m">
-							<li><a href="index.html">Homepage v1</a></li>
-							<li><a href="home-02.html">Homepage v2</a></li>
-							<li><a href="home-03.html">Homepage v3</a></li>
+							<?php
+							$main_kat=$main['id_kategori_utama']; 
+							///////////////SUB KATEGORI////////////////
+											$sql2="SELECT 
+											kategori_berita.id_kategori_berita as id_kategori_berita,
+											kategori_berita.nama_kategori as nama_kategori
+											FROM kategori_berita
+											LEFT JOIN berita
+											ON kategori_berita.id_kategori_berita=berita.id_kategori_berita
+											WHERE kategori_berita.id_kategori_utama='$main_kat' 
+											AND kategori_berita.aktif='Y'
+											GROUP BY kategori_berita.id_kategori_berita
+											HAVING count(berita.id_berita)>0"; 
+							$fetch2=mysqli_query($kon,$sql2);
+							while ($cat=mysqli_fetch_array($fetch2)) {
+							///////////////SUB KATEGORI////////////////
+							?>
+								<li><a href="category-01.html"><?=$cat['nama_kategori']; ?></a></li>
+							<?php } ?>
 						</ul>
 
 						<span class="arrow-main-menu-m">
 							<i class="fa fa-angle-right" aria-hidden="true"></i>
 						</span>
 					</li>
+				<?php } ?>
 
-					<li>
-						<a href="category-01.html">News</a>
-					</li>
-
-					<li>
-						<a href="category-02.html">Entertainment </a>
-					</li>
-
-					<li>
-						<a href="category-01.html">Business</a>
-					</li>
-
-					<li>
-						<a href="category-02.html">Travel</a>
-					</li>
-
-					<li>
-						<a href="category-01.html">Life Style</a>
-					</li>
-
-					<li>
-						<a href="category-02.html">Video</a>
-					</li>
-
-					<li>
-						<a href="#">Features</a>
-						<ul class="sub-menu-m">
-							<li><a href="category-01.html">Category Page v1</a></li>
-							<li><a href="category-02.html">Category Page v2</a></li>
-							<li><a href="blog-grid.html">Blog Grid Sidebar</a></li>
-							<li><a href="blog-list-01.html">Blog List Sidebar v1</a></li>
-							<li><a href="blog-list-02.html">Blog List Sidebar v2</a></li>
-							<li><a href="blog-detail-01.html">Blog Detail Sidebar</a></li>
-							<li><a href="blog-detail-02.html">Blog Detail No Sidebar</a></li>
-							<li><a href="about.html">About Us</a></li>
-							<li><a href="contact.html">Contact Us</a></li>
-						</ul>
-
-						<span class="arrow-main-menu-m">
-							<i class="fa fa-angle-right" aria-hidden="true"></i>
-						</span>
-					</li>
 				</ul>
 			</div>
 			
@@ -210,7 +200,7 @@
 					<!-- Menu desktop -->
 					<nav class="menu-desktop">
 						<a class="logo-stick" href="index.html">
-							<img src="images/icons/logo-01.png" alt="LOGO">
+							<img src="<?=asset('images/icons/logo-01.png') ?>" alt="LOGO">
 						</a>
 
 						<ul class="main-menu">
@@ -220,7 +210,18 @@
 							</li>
 							<?php 
 								///////////////MAIN KATEGORI////////////////
-								$sql="SELECT id_kategori_utama,nama_kategori_utama from kategori_utama WHERE aktif_kategori_utama='Y'";
+								$sql="SELECT 
+								kategori_utama.id_kategori_utama,
+								kategori_utama.nama_kategori_utama 
+								FROM kategori_utama
+								LEFT JOIN kategori_berita
+								ON kategori_berita.id_kategori_utama=kategori_utama.id_kategori_utama
+								LEFT JOIN berita
+								ON kategori_berita.id_kategori_berita=berita.id_kategori_berita 
+								WHERE kategori_utama.aktif_kategori_utama='Y'
+								GROUP BY kategori_utama.id_kategori_utama
+								HAVING COUNT(berita.id_berita)>0
+								";
 								
 								$fetch=mysqli_query($kon,$sql);
 								
@@ -242,7 +243,17 @@
 										<a class="nav-link active" data-toggle="pill" href="#news-0" role="tab">All</a>
 										<?php 
 											///////////////SUB KATEGORI////////////////
-											$sql2="SELECT id_kategori_berita,nama_kategori from kategori_berita WHERE id_kategori_utama='$main_kat' AND aktif='Y'"; 
+											$sql2="SELECT 
+											kategori_berita.id_kategori_berita as id_kategori_berita,
+											kategori_berita.nama_kategori as nama_kategori
+											FROM kategori_berita
+											LEFT JOIN berita
+											ON kategori_berita.id_kategori_berita=berita.id_kategori_berita
+											WHERE kategori_berita.id_kategori_utama='$main_kat' 
+											AND kategori_berita.aktif='Y'
+											GROUP BY kategori_berita.id_kategori_berita
+											HAVING count(berita.id_berita)>0
+											"; 
 											$fetch2=mysqli_query($kon,$sql2);
 											///////////////SUB KATEGORI////////////////
 										?>
@@ -260,23 +271,41 @@
 									<div class="tab-content">
 										<div class="tab-pane show active" id="news-0" role="tabpanel">
 											<div class="row">
+											<?php 
+											$sql6="
+											SELECT berita.id_berita,
+											CONCAT(berita.tanggal,' ',berita.jam) as datetime, 
+											berita.gambar as gambar, 
+											kategori_berita.nama_kategori as kategori, 
+											berita.judul as judul 
+											FROM berita 
+											LEFT JOIN kategori_berita 
+											ON berita.id_kategori_berita=kategori_berita.id_kategori_berita 
+											WHERE berita.aktif='Y' 
+											AND kategori_berita.id_kategori_utama='$main_kat' 
+											AND kategori_berita.aktif='Y' 
+											ORDER BY datetime,berita.dibaca DESC LIMIT 4"; 
+											$fetch6=mysqli_query($kon,$sql6);
+											while ($all=mysqli_fetch_array($fetch6)){
+											?>
+											<?php $img=$all['gambar']; ?>
 												<div class="col-3">
 													<!-- Item post -->	
 													<div>
 														<a href="blog-detail-01.html" class="wrap-pic-w hov1 trans-03">
-															<img src="images/post-05.jpg" alt="IMG">
+															<img src="<?=imagePost($img) ?>" alt="IMG">
 														</a>
 
 														<div class="p-t-10">
 															<h5 class="p-b-5">
 																<a href="blog-detail-01.html" class="f1-s-5 cl3 hov-cl10 trans-03">
-																	Donec metus orci, malesuada et lectus vitae
+																	<?=$all['judul']; ?>
 																</a>
 															</h5>
 
 															<span class="cl8">
 																<a href="#" class="f1-s-6 cl8 hov-cl10 trans-03">
-																	Music
+																	<?=$all['kategori'] ?>
 																</a>
 
 																<span class="f1-s-3 m-rl-3">
@@ -284,105 +313,16 @@
 																</span>
 
 																<span class="f1-s-3">
-																	Feb 18
+																	<?php 
+																		$dt=$all['datetime']; 
+																		echo dateTumbnail($dt);
+																	 ?>
 																</span>
 															</span>
 														</div>
 													</div>
 												</div>
-
-												<div class="col-3">
-													<!-- Item post -->	
-													<div>
-														<a href="blog-detail-01.html" class="wrap-pic-w hov1 trans-03">
-															<img src="images/post-10.jpg" alt="IMG">
-														</a>
-
-														<div class="p-t-10">
-															<h5 class="p-b-5">
-																<a href="blog-detail-01.html" class="f1-s-5 cl3 hov-cl10 trans-03">
-																	Donec metus orci, malesuada et lectus vitae
-																</a>
-															</h5>
-
-															<span class="cl8">
-																<a href="#" class="f1-s-6 cl8 hov-cl10 trans-03">
-																	Finance
-																</a>
-
-																<span class="f1-s-3 m-rl-3">
-																	-
-																</span>
-
-																<span class="f1-s-3">
-																	Jan 15
-																</span>
-															</span>
-														</div>
-													</div>
-												</div>
-
-												<div class="col-3">
-													<!-- Item post -->	
-													<div>
-														<a href="blog-detail-01.html" class="wrap-pic-w hov1 trans-03">
-															<img src="images/post-14.jpg" alt="IMG">
-														</a>
-
-														<div class="p-t-10">
-															<h5 class="p-b-5">
-																<a href="blog-detail-01.html" class="f1-s-5 cl3 hov-cl10 trans-03">
-																	Donec metus orci, malesuada et lectus vitae
-																</a>
-															</h5>
-
-															<span class="cl8">
-																<a href="#" class="f1-s-6 cl8 hov-cl10 trans-03">
-																	Beach
-																</a>
-
-																<span class="f1-s-3 m-rl-3">
-																	-
-																</span>
-
-																<span class="f1-s-3">
-																	Feb 12
-																</span>
-															</span>
-														</div>
-													</div>
-												</div>
-
-												<div class="col-3">
-													<!-- Item post -->	
-													<div>
-														<a href="blog-detail-01.html" class="wrap-pic-w hov1 trans-03">
-															<img src="images/post-36.jpg" alt="IMG">
-														</a>
-
-														<div class="p-t-10">
-															<h5 class="p-b-5">
-																<a href="blog-detail-01.html" class="f1-s-5 cl3 hov-cl10 trans-03">
-																	Donec metus orci, malesuada et lectus vitae
-																</a>
-															</h5>
-
-															<span class="cl8">
-																<a href="#" class="f1-s-6 cl8 hov-cl10 trans-03">
-																	Technology
-																</a>
-
-																<span class="f1-s-3 m-rl-3">
-																	-
-																</span>
-
-																<span class="f1-s-3">
-																	Jan 20
-																</span>
-															</span>
-														</div>
-													</div>
-												</div>
+											<?php } ?>
 											</div>
 										</div>
 
@@ -393,7 +333,15 @@
 										<div class="tab-pane" id="<?php $subkat=$sub['id_kategori_berita']; echo $main['nama_kategori_utama'].'-'.$sub['id_kategori_berita']; ?>" role="tabpanel">
 											<div class="row">
 												<?php 
-													$sql3="SELECT id_berita,CONCAT(tanggal,' ',jam)  as datetime,gambar,judul FROM berita WHERE aktif='Y' AND id_kategori_berita='$subkat' ORDER BY datetime desc LIMIT 4";
+													$sql3="SELECT 
+													id_berita,
+													CONCAT(tanggal,' ',jam)  as datetime,
+													gambar,judul 
+													FROM berita 
+													WHERE aktif='Y' 
+													AND id_kategori_berita='$subkat' 
+													ORDER BY datetime 
+													desc LIMIT 4";
 													$fetch3=mysqli_query($kon,$sql3);
 													while ($p=mysqli_fetch_array($fetch3)) {
 												 ?>

@@ -1,5 +1,6 @@
 <?php include 'action_front_page.php'; ?>
 
+<?php include 'highlights.php'; ?>
 
 <section class="bg0 p-t-70">
 		<div class="container">
@@ -49,7 +50,9 @@
 
 
 									<li class="nav-item-more dropdown dis-none">
-										<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
+										<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="<?php 
+								$imb=$a['nama_kategori_utama'];
+								echo baseUrl().'/index.php?module=pageDetail&front_main_category=$imb'; ?>">
 											<i class="fa fa-ellipsis-h"></i>
 										</a>
 
@@ -78,7 +81,9 @@
 											$ct=$a['id_kategori']; 
 											foreach (getAllNewsbyMainCategory($ct,$kon,0,1) as $key => $c) { ?>	
 											<div class="m-b-30">
-												<a href="blog-detail-01.html" class="wrap-pic-w hov1 trans-03">
+												<a href="<?php 
+								$ib=$c['judul_seo'];
+								echo baseUrl().'/index.php?module=pageDetail&id_berita=$ib'; ?>" class="wrap-pic-w hov1 trans-03">
 													<img src="
 													<?php 
 														$img=$c['gambar'];
@@ -88,13 +93,17 @@
 
 												<div class="p-t-20">
 													<h5 class="p-b-5">
-														<a href="blog-detail-01.html" class="f1-m-3 cl2 hov-cl10 trans-03">
+														<a href="<?php 
+								$ib=$c['judul_seo'];
+								echo baseUrl().'/index.php?module=pageDetail&id_berita=$ib'; ?>" class="f1-m-3 cl2 hov-cl10 trans-03">
 															<?=$c['judul']; ?>
 														</a>
 													</h5>
 
 													<span class="cl8">
-														<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
+														<a href="<?php 
+								$ct=$c['judul_seo'];
+								echo baseUrl().'/index.php?module=pageDetail&kategori=$ct'; ?>" class="f1-s-4 cl8 hov-cl10 trans-03">
 															<?=$c['nama_kategori'] ?>
 														</a>
 
@@ -119,7 +128,9 @@
 											$cat=$a['id_kategori']; 
 											foreach (getAllHighlitedNewsbyCategory($cat,$kon,1,3) as $key => $c) { ?>	
 											<div class="flex-wr-sb-s m-b-30">
-												<a href="blog-detail-01.html" class="size-w-1 wrap-pic-w hov1 trans-03">
+												<a href="<?php 
+								$ib=$c['judul_seo'];
+								echo baseUrl().'/index.php?module=pageDetail&id_berita=$ib'; ?>" class="size-w-1 wrap-pic-w hov1 trans-03">
 													<img src="<?php 
 														$img=$c['gambar'];
 														echo imagePost($img);
@@ -128,13 +139,17 @@
 
 												<div class="size-w-2">
 													<h5 class="p-b-5">
-														<a href="blog-detail-01.html" class="f1-s-5 cl3 hov-cl10 trans-03">
+														<a href="<?php 
+								$ib=$c['judul_seo'];
+								echo baseUrl().'/index.php?module=pageDetail&id_berita=$ib'; ?>" class="f1-s-5 cl3 hov-cl10 trans-03">
 															<?=$c['judul']; ?>
 														</a>
 													</h5>
 
 													<span class="cl8">
-														<a href="#" class="f1-s-6 cl8 hov-cl10 trans-03">
+														<a href="<?php 
+								$ct=$c['nama_kategori'];
+								echo baseUrl().'/index.php?module=pageDetail&kategori=$ct'; ?>" class="f1-s-6 cl8 hov-cl10 trans-03">
 															<?=$c['nama_kategori'] ?>
 														</a>
 
@@ -262,9 +277,6 @@
 		</div>
 </section>
 
-
-
-
 <section class="bg0 p-t-60 p-b-35">
 		<div class="container">
 			<div class="row justify-content-center">
@@ -281,20 +293,26 @@
 							<div class="col-sm-6 p-r-25 p-r-15-sr991">
 							<!-- Item latest -->	
 							<div class="m-b-45">
-								<a href="blog-detail-01.html" class="wrap-pic-w hov1 trans-03">
+								<a href="<?php 
+								$ib=$a['id_berita'];
+								echo baseUrl().'/index.php?module=pageDetail&id_berita=$ib'; ?>" class="wrap-pic-w hov1 trans-03">
 									<img src="<?php $img=$a['gambar'];
 														echo imagePost($img);
 													 ?>" alt="IMG"></a>
 
 								<div class="p-t-16">
 									<h5 class="p-b-5">
-										<a href="blog-detail-01.html" class="f1-m-3 cl2 hov-cl10 trans-03">
+										<a href="<?php 
+								$ib=$a['id_berita'];
+								echo baseUrl().'/index.php?module=pageDetail&id_berita=$ib'; ?>" class="f1-m-3 cl2 hov-cl10 trans-03">
 											<?=$a['judul']; ?>
 										</a>
 									</h5>
 
 									<span class="cl8">
-										<a href="#" class="f1-s-4 cl8 hov-cl10 trans-03">
+										<a href="<?php 
+								$ir=$a['id_reporter'];
+								echo baseUrl().'/index.php?module=reporterDetail&id_berita=$ir'; ?>" class="f1-s-4 cl8 hov-cl10 trans-03">
 											Oleh. <?php echo $a['reporter']; ?>
 										</a>
 

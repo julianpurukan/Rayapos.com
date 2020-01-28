@@ -15,9 +15,14 @@
 	{
 		return 'http://imgu.rayapos.com/'.$image;
 	}
-	function imagePost($img)
+	function imagePost($image)
     {
+    	$img=str_replace(' ','%20', $image);
         return 'https://imgb.rayapos.com/'.$img;
+    }
+    function detailPost($id)
+    {
+    	return baseUrl().$id;
     }
 
 

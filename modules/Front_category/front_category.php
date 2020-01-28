@@ -1,5 +1,6 @@
 	<?php 
 		$sidebar='standard2';
+		$breadcumb='category';
 		include './modules/Basic/breadcumb.php'; 
 	?>
 

@@ -1,7 +1,8 @@
 <?php 
 	function getNews($category,$kon)
 	{
-		$get="SELECT 
+		$get="SELECT
+		berita.judul_seo as judul_seo, 
 		berita.id_berita as id,
 		CONCAT(berita.tanggal,' ',berita.jam)  as Thetime, 
 		berita.gambar as gambar,
@@ -21,6 +22,7 @@
 		        'time'=>$c['Thetime'],
 		        'judul'=>$c['judul'],
 		        'gambar'=>$c['gambar'],
+		        'judul_seo'=>$c['judul_seo'],
 		        'id_kategori'=>$c['id_kategori_berita'])
 		     );
 		}
@@ -30,6 +32,7 @@
 	function getAllNewsbyMainCategory($category,$kon,$start,$end)
 	{
 		$get="SELECT 
+				berita.judul_seo as judul_seo,
 				berita.id_berita as id, 
 				CONCAT(berita.tanggal,' ',berita.jam) as Thetime, 
 				berita.gambar as gambar, berita.judul as judul, 
@@ -44,6 +47,7 @@
 		$result=array();
 		while ($c=mysqli_fetch_array($sql_get)) {
 		    array_push($result,array(
+		    	'judul_seo'=>$c['judul_seo'],
 		    	'id_berita'=>$c['id'],
 		        'time'=>$c['Thetime'],
 		        'judul'=>$c['judul'],
@@ -58,7 +62,9 @@
 	{
 		if($mainCategory!=null)
 		{
-			$get="SELECT 
+			$get="SELECT
+				berita.judul_seo as judul_seo, 
+				reporter.id_reporter as id_reporter,
 				reporter.nama_reporter as reporter,
 				berita.id_berita as id, 
 				CONCAT(berita.tanggal,' ',berita.jam) as Thetime, 
@@ -75,8 +81,11 @@
 				order by Thetime,berita.dibaca DESC LIMIT $start,$end";
 		}
 		else{
-			$get="SELECT 
-				reporter.nama_reporter as reporter,berita.id_berita as id, 
+			$get="SELECT
+				reporter.id_reporter as id_reporter,
+				berita.judul_seo as judul_seo, 
+				reporter.nama_reporter as reporter,
+				berita.id_berita as id, 
 				CONCAT(berita.tanggal,' ',berita.jam) as Thetime, 
 				berita.gambar as gambar, berita.judul as judul, 
 				kategori_berita.nama_kategori as nama_kategori 
@@ -95,6 +104,8 @@
 		$result=array();
 		while ($c=mysqli_fetch_array($sql_get)) {
 		    array_push($result,array(
+		    	'id_reporter'=>$c['id_reporter'],
+		    	'judul_seo'=>$c['judul_seo'],
 		    	'id_berita'=>$c['id'],
 		        'time'=>$c['Thetime'],
 		        'reporter'=>$c['reporter'],
@@ -108,7 +119,18 @@
 	}
 	function getMainCategory($kon)
 	{
-		$get="SELECT id_kategori_utama,nama_kategori_utama,warna_kategori_utama,warna_text_kategori_utama FROM kategori_utama";
+		$get="SELECT 
+		kategori_utama.id_kategori_utama as id_kategori_utama,
+		kategori_utama.nama_kategori_utama as nama_kategori_utama,
+		kategori_utama.warna_kategori_utama as warna_kategori_utama,
+		kategori_utama.warna_text_kategori_utama as warna_text_kategori_utama 
+		FROM kategori_utama
+		LEFT JOIN  kategori_berita
+		ON kategori_utama.id_kategori_utama=kategori_berita.id_kategori_utama
+		LEFT JOIN berita
+		ON kategori_berita.id_kategori_berita=berita.id_kategori_berita
+		GROUP BY kategori_utama.id_kategori_utama
+		HAVING COUNT(berita.id_berita)>0;";
 		
 		$sql_get=mysqli_query($kon,$get);
 		$result=array();
@@ -124,7 +146,16 @@
 	}
 	function getNewsCategory($mainCategory,$kon)
 	{
-		$get="SELECT id_kategori_berita,nama_kategori FROM kategori_berita WHERE id_kategori_utama='$mainCategory'";
+		$get="SELECT 
+			  kategori_berita.id_kategori_berita,
+			  kategori_berita.nama_kategori 
+			  FROM kategori_berita 
+			  LEFT JOIN berita
+			  ON berita.id_kategori_berita=kategori_berita.id_kategori_berita
+			  WHERE kategori_berita.id_kategori_utama='$mainCategory'
+			  GROUP BY kategori_berita.id_kategori_berita
+			  HAVING count(berita.id_berita);
+			  ";
 		
 		$sql_get=mysqli_query($kon,$get);
 		$result=array();
@@ -136,11 +167,5 @@
 		}
 		return $result;
 	}
-
-
-	
-	
-
-
 
  ?> 
